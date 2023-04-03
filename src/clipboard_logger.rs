@@ -7,7 +7,7 @@ use std::{thread, time::Duration};
 const CLIPBOARD_ERROR: &str = "ERROR PROCESSING ClipboardContext";
 pub const LOGFILE: &str = "/Users/josephdespres/rust/super_clipboard/.cliplog";
 
-// todo make this a method
+// todo make this a method for types macos linux
 fn get_clip(ctx: &mut cli_clipboard::macos_clipboard::MacOSClipboardContext) -> String {
     ctx.get_contents()
         .unwrap_or_else(|_| String::from(CLIPBOARD_ERROR))
