@@ -1,0 +1,14 @@
+2023-04-03-06:28:21 clip: rror-impl v1.0
+2023-04-03-06:28:26 clip: thiserror-impl v1.0.40
+   Compiling bytemuc
+2023-04-03-06:28:28 clip: esskit_winit v0.10.0
+   Compiling emath v0.21.0
+2023-04-03-06:28:29 clip: v
+2023-04-03-06:28:30 clip: aint
+2023-04-03-06:35:29 clip: target/release/super_clipboard
+2023-04-03-06:53:39 clip: fn get_clip(ctx: &mut cli_clipboard::macos_clipboard::MacOSClipboardContext) -> String {
+    ctx.get_contents()
+        .unwrap_or_else(|_| String::from(CLIPBOARD_ERROR))
+}
+
+
