@@ -46,9 +46,9 @@ fn write_clip(clip: String) {
     }
 }
 
-pub fn copy_item(item: &str) {
+pub fn copy_item(item: String) {
     let mut ctx = ClipboardContext::new().unwrap();
     let re = Regex::new(r"\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2} clip: ").unwrap();
-    let replaced = re.replace_all(item, "");
+    let replaced = re.replace_all(item.as_str(), "");
     ctx.set_contents(replaced.to_string()).unwrap();
 }
