@@ -2,6 +2,9 @@ use eframe::egui;
 use regex::Regex;
 use std::fs::read_to_string;
 use std::path::Path;
+use std::thread;
+use std::time::Duration;
+use std::time::Instant;
 
 use crate::clipboard_logger::{copy_item, LOGFILE};
 
@@ -21,13 +24,15 @@ impl FileViewer {
         Self::default()
     }
 }
-use std::time::Instant;
+
 impl eframe::App for FileViewer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         let mut file_contents = read_and_rev_file(Path::new(LOGFILE)).into_iter();
 
         egui::CentralPanel::default().show(ctx, |ui| {
+            // timing for dev
             let start = Instant::now();
+
             if ui.input(|i| i.key_pressed(egui::Key::Q)) {
                 panic!("BOO Pressed Q");
             }
@@ -43,16 +48,13 @@ impl eframe::App for FileViewer {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 for line in file_contents {
                     if ui.selectable_label(false, &line).clicked() {
-                        ui.push(egui::Event::WindowClosed);
                         copy_item(line);
-                        ctx.request_repaint();
-                        ctx.request_repaint();
-                        ctx.request_repaint();
-                        ctx.request_repaint();
-                        ctx.request_repaint();
+                        thread::sleep(Duration::from_millis(75)); // hack for the repaint to work
                         ctx.request_repaint();
                     }
                 }
+
+                // timing for dev
                 let end = Instant::now();
                 let duration = end.duration_since(start);
                 println!("Time elapsed: {:?}", duration);
