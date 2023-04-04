@@ -7,7 +7,7 @@ fn main() {
         clipboard_logger::monitor_clipboard();
     }
 
-    let gui = false;
+    let gui = true;
     if gui {
         gui::launch_gui();
     }

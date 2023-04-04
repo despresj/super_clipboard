@@ -1,8 +1,8 @@
-use sysinfo::{ProcessExt, System, SystemExt};
+use sysinfo::{System, SystemExt};
 
 pub fn is_super_clipboard_running() -> bool {
     let mut super_clipboard = 0;
-    for process in System::new_all().processes_by_exact_name("super_clipboard") {
+    for _ in System::new_all().processes_by_exact_name("super_clipboard") {
         super_clipboard += 1;
     }
 

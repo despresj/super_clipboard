@@ -1,9 +1,8 @@
 use eframe::egui;
-use egui::Vec2;
 use std::fs::read_to_string;
 use std::path::Path;
 
-use crate::clipboard_logger::LOGFILE;
+use crate::clipboard_logger::{copy_item, LOGFILE};
 
 pub fn launch_gui() {
     eframe::run_native(
@@ -17,13 +16,13 @@ pub fn launch_gui() {
 struct FileViewer {}
 
 impl FileViewer {
-    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+    fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         Self::default()
     }
 }
 
 impl eframe::App for FileViewer {
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         let file_path = Path::new(LOGFILE);
         let file_contents = read_to_string(file_path).unwrap();
         egui::CentralPanel::default().show(ctx, |ui| {
@@ -31,17 +30,15 @@ impl eframe::App for FileViewer {
                 panic!("BOO Pressed Q");
             }
 
-            ui.label("new app");
-
-            let mut scroll_delta = Vec2::ZERO;
-            if ui.button("Scroll down").clicked() {
-                scroll_delta.y -= 64.0; // move content up
+            if ui.button("Clear").clicked() {
+                todo!();
             }
 
             egui::ScrollArea::vertical().show(ui, |ui| {
-                ui.scroll_with_delta(scroll_delta);
                 for line in file_contents.split("\n") {
-                    ui.label(format!("{line}"));
+                    if ui.selectable_label(false, line).clicked() {
+                        copy_item(line);
+                    }
                 }
             });
         });
