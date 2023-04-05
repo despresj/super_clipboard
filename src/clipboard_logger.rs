@@ -6,14 +6,7 @@ use std::io::Write;
 use std::{thread, time::Duration};
 
 const CLIPBOARD_ERROR: &str = "ERROR PROCESSING ClipboardContext";
-// TODO this should be a variable
 pub const LOGFILE: &str = "/Users/josephdespres/rust/super_clipboard/.cliplog";
-
-// TODO make this a method for types macos linux
-fn get_clip(ctx: &mut cli_clipboard::macos_clipboard::MacOSClipboardContext) -> String {
-    ctx.get_contents()
-        .unwrap_or_else(|_| String::from(CLIPBOARD_ERROR))
-}
 
 pub fn monitor_clipboard() {
     let mut ctx = ClipboardContext::new().unwrap();
@@ -27,11 +20,12 @@ pub fn monitor_clipboard() {
     }
 }
 
-fn format_timestamp() -> String {
-    Local::now().format("%Y-%m-%d-%H:%M:%S").to_string()
+pub fn get_clip(ctx: &mut cli_clipboard::macos_clipboard::MacOSClipboardContext) -> String {
+    ctx.get_contents()
+        .unwrap_or_else(|_| String::from(CLIPBOARD_ERROR))
 }
 
-fn write_clip(clip: String) {
+pub fn write_clip(clip: String) {
     if clip != *CLIPBOARD_ERROR {
         let mut file = OpenOptions::new()
             .write(true)
@@ -40,15 +34,19 @@ fn write_clip(clip: String) {
             .open(LOGFILE)
             .unwrap();
 
-        let write_str = format!("{} clip: {}", format_timestamp(), &clip);
+        let write_str = format!("{}: {}", format_timestamp(), &clip);
         dbg!(&write_str);
         writeln!(file, "{write_str}").unwrap();
     }
 }
 
+fn format_timestamp() -> String {
+    Local::now().format("%Y-%m-%d-%H:%M:%S").to_string()
+}
+
 pub fn copy_item(item: String) {
     let mut ctx = ClipboardContext::new().unwrap();
-    let re = Regex::new(r"\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2} clip: ").unwrap();
+    let re = Regex::new(r"\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2}: ").unwrap();
     let replaced = re.replace_all(item.as_str(), "");
     ctx.set_contents(replaced.to_string()).unwrap();
 }
