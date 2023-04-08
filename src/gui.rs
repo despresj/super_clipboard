@@ -13,6 +13,7 @@ use crate::clipboard_logger::write_clip;
 use crate::clipboard_logger::{copy_item, LOGFILE};
 
 pub fn launch_gui() {
+    dbg!("egui");
     eframe::run_native(
         "Super Clipboard",
         eframe::NativeOptions::default(),
